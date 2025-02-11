@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import { Editor, Transforms } from 'slate';
 import { Slate, Editable, withReact, RenderElementProps, RenderLeafProps } from 'slate-react';
 import { Note } from '../../types/Note';
@@ -18,7 +18,7 @@ interface EditorAreaProps {
   insertInlineEquation: (editor: Editor) => void;
 }
 
-export const EditorArea: React.FC<EditorAreaProps> = ({
+const EditorArea: React.FC<EditorAreaProps> = ({
   editor,
   note,
   renderLeaf,
@@ -28,48 +28,68 @@ export const EditorArea: React.FC<EditorAreaProps> = ({
   insertEquationBlock,
   insertInlineEquation,
 }) => {
+  const [hasError, setHasError] = useState(false);
+  const [error, setError] = useState(null);
+
   const handleKeyDown = useCallback((event: React.KeyboardEvent<HTMLDivElement>) => {
-    if (handleMarkdownConversion(editor, event)) {
-      event.preventDefault();
-      return;
-    }
+    try {
+      if (handleMarkdownConversion(editor, event)) {
+        event.preventDefault();
+        return;
+      }
 
-    if (event.key === 'Tab') {
-      event.preventDefault();
-      
-      const { selection } = editor;
-      if (!selection) return;
+      if (event.key === 'Tab') {
+        event.preventDefault();
+        
+        const { selection } = editor;
+        if (!selection) return;
 
-      // Check if we're in a code block
-      const [node] = Editor.parent(editor, selection);
-      const isCodeBlock = (node as any).type === 'code-block';
+        try {
+          // Check if we're in a code block
+          const [node] = Editor.parent(editor, selection);
+          const isCodeBlock = (node as any).type === 'code-block';
 
-      if (isCodeBlock) {
-        if (!event.shiftKey) {
-          // Insert 4 spaces
-          Transforms.insertText(editor, '    ');
-        } else {
-          // Try to remove 4 spaces before cursor
-          const currentPoint = selection.anchor;
-          if (currentPoint.offset >= 4) {
-            const start = { ...currentPoint, offset: currentPoint.offset - 4 };
-            const range = { anchor: start, focus: currentPoint };
-            const textBefore = Editor.string(editor, range);
-            
-            if (textBefore === '    ') {
-              Transforms.delete(editor, { at: range });
-            }
+          if (isCodeBlock) {
+            editor.insertText('  '); // Insert 2 spaces for tabs in code blocks
+          } else {
+            // Handle regular tab behavior
+            editor.insertText('\t');
           }
-        }
-      } else {
-        // Handle normal tab behavior for non-code blocks
-        if (!event.shiftKey) {
-          event.preventDefault();
+        } catch (error) {
+          console.error('Error handling tab:', error);
+          // Fallback to simple tab insertion
           editor.insertText('\t');
         }
       }
+    } catch (error) {
+      console.error('Error in keydown handler:', error);
+      setHasError(true);
+      setError(error);
+      // Prevent the error from crashing the editor
+      event.preventDefault();
     }
   }, [editor]);
+
+  useEffect(() => {
+    if (hasError) {
+      // Attempt to recover from the error
+      try {
+        // Reset the editor to its previous state
+        editor.history.redo();
+      } catch (error) {
+        console.error('Error recovering from error:', error);
+      }
+    }
+  }, [hasError, editor]);
+
+  if (hasError) {
+    return (
+      <div>
+        <h1>Error occurred in the editor</h1>
+        <p>{error.message}</p>
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col h-screen bg-white dark:bg-gray-900 pt-0">
@@ -106,3 +126,5 @@ export const EditorArea: React.FC<EditorAreaProps> = ({
     </div>
   );
 };
+
+export default EditorArea;

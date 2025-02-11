@@ -1,46 +1,34 @@
 # Wazo Notes
 
-## Overview
-Wazo Notes is an advanced note-taking application with AI-powered features, including:
-- Intelligent flashcard generation
+A simple, modern note-taking application focused on connected thinking and learning.
+
+## Features
+- Rich text editor with markdown support
+- Code blocks with syntax highlighting
+- Task management and tracking
+- Dark/Light theme
+- Note linking and organization
 - Knowledge graph visualization
-- Zettelkasten-inspired note linking
-- Cross-platform desktop application
+- Full-text search
 
-## Project Structure
-- `frontend/`: React TypeScript application
-- `backend/`: Express.js TypeScript server
+## Setup
 
-## Prerequisites
-- Node.js (v16+)
-- npm or yarn
-
-## Setup Instructions
-
-### Frontend Setup
+### Frontend
 ```bash
 cd frontend
 npm install
+npm start
 ```
 
-### Backend Setup
+### Backend
 ```bash
 cd backend
 npm install
-```
-
-## Running the Application
-
-### Start the Backend Server
-```bash
-cd backend
 npm start
 ```
 
-### Start the Frontend Application
-```bash
-cd frontend
-npm start
-```
-
-The application should now be running with the frontend accessible through Electron and the backend server running locally.
+## Future Improvements
+- AI-powered flashcard generation
+- Smart learning suggestions
+- Spaced repetition learning
+- Study progress tracking
