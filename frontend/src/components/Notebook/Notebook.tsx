@@ -39,7 +39,25 @@ export const Notebook = React.memo(({ note, onUpdate, onDelete, onCreate }: Note
   const editor = useMemo(() => {
     const e = withHistory(withReact(createEditor()));
     
-    const { insertData, insertBreak: originalInsertBreak, isInline } = e;
+    const { insertData, insertBreak: originalInsertBreak, isInline, normalizeNode: originalNormalizeNode } = e;
+
+    // Add custom normalizeNode to handle invalid states
+    e.normalizeNode = entry => {
+      const [node, path] = entry;
+      
+      // Ensure the editor always has at least one valid block
+      if (Editor.isEditor(node) && node.children.length === 0) {
+        Transforms.insertNodes(
+          editor,
+          { type: 'paragraph', children: [{ text: '' }] },
+          { at: [0] }
+        );
+        return;
+      }
+
+      // Handle any other normalization
+      originalNormalizeNode(entry);
+    };
 
     // Override isInline to handle inline equations
     e.isInline = element => {
@@ -83,58 +101,68 @@ export const Notebook = React.memo(({ note, onUpdate, onDelete, onCreate }: Note
       originalInsertBreak();
     };
     
-    e.insertData = (data: DataTransfer | null) => {
-      if (!data) return;
-      
-      const text = data.getData('text/plain');
-      if (!text) {
-        insertData(data);
-        return;
-      }
-      
-      // Handle code blocks with GitHub-style syntax
-      if (text.includes('```')) {
-        const lines = text.split('\n');
-        let inCodeBlock = false;
-        let language = '';
-        let codeContent = '';
+    // Add error handling for insertData
+    e.insertData = data => {
+      try {
+        if (!data) return;
         
-        for (let i = 0; i < lines.length; i++) {
-          const line = lines[i];
-          if (line.startsWith('```')) {
-            if (!inCodeBlock) {
-              // Start of code block
-              inCodeBlock = true;
-              language = line.slice(3).trim() || 'python';
-            } else {
-              // End of code block
-              const codeContentTrimmed = codeContent.trim();
-              const codeBlock: CodeBlockElement = {
-                type: 'code-block',
-                language,
-                code: codeContentTrimmed,
-                children: [{ text: codeContentTrimmed }],
-              };
-              Transforms.insertNodes(e, codeBlock);
-              Transforms.insertNodes(e, {
-                type: 'paragraph',
-                children: [{ text: '' }],
-              } as CustomElement);
-              
-              inCodeBlock = false;
-              codeContent = '';
-            }
-          } else if (inCodeBlock) {
-            codeContent += line + '\n';
-          } else {
-            // Regular text outside code block
-            Transforms.insertText(e, line + '\n');
-          }
+        const text = data.getData('text/plain');
+        if (!text) {
+          insertData(data);
+          return;
         }
-        return;
+        
+        // Handle code blocks with GitHub-style syntax
+        if (text.includes('```')) {
+          const lines = text.split('\n');
+          let inCodeBlock = false;
+          let language = '';
+          let codeContent = '';
+          
+          for (let i = 0; i < lines.length; i++) {
+            const line = lines[i];
+            if (line.startsWith('```')) {
+              if (!inCodeBlock) {
+                // Start of code block
+                inCodeBlock = true;
+                language = line.slice(3).trim() || 'python';
+              } else {
+                // End of code block
+                const codeContentTrimmed = codeContent.trim();
+                const codeBlock: CodeBlockElement = {
+                  type: 'code-block',
+                  language,
+                  code: codeContentTrimmed,
+                  children: [{ text: codeContentTrimmed }],
+                };
+                Transforms.insertNodes(e, codeBlock);
+                Transforms.insertNodes(e, {
+                  type: 'paragraph',
+                  children: [{ text: '' }],
+                } as CustomElement);
+                
+                inCodeBlock = false;
+                codeContent = '';
+              }
+            } else if (inCodeBlock) {
+              codeContent += line + '\n';
+            } else {
+              // Regular text outside code block
+              Transforms.insertText(e, line + '\n');
+            }
+          }
+          return;
+        }
+        
+        insertData(data);
+      } catch (error) {
+        console.error('Error inserting data:', error);
+        // Fallback to simple text insertion if rich insertion fails
+        const text = data.getData('text/plain');
+        if (text) {
+          editor.insertText(text);
+        }
       }
-      
-      insertData(data);
     };
     
     return e;
