@@ -1,0 +1,52 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Note {
+  id              String   @id @default(uuid())
+  content         String
+  created_at      String
+  last_modified   String
+  tags            String   @default("[]") // JSON string array
+  code_outputs    String   @default("{}") // JSON object
+  backlinks       String   @default("[]") // JSON string array
+  references      String   @default("[]") // JSON string array
+  suggested_links String   @default("[]") // JSON string array
+  tasks           Task[]   @relation("NoteToTask")
+  user_id         String   // Foreign key to User
+  user            User     @relation(fields: [user_id], references: [id])
+}
+
+model Task {
+  id            String   @id @default(uuid())
+  title         String
+  description   String?
+  status        String
+  priority      String
+  due_date      String?
+  created_at    String
+  last_modified String
+  tags          String   @default("[]") // JSON string array
+  notes         Note[]   @relation("NoteToTask")
+  user_id       String   // Foreign key to User
+  user          User     @relation(fields: [user_id], references: [id])
+}
+
+model User {
+  id           String   @id @default(uuid())
+  email        String   @unique
+  name         String?
+  passwordHash String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  notes        Note[]   // Relation to notes
+  tasks        Task[]   // Relation to tasks
+}

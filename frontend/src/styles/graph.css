@@ -1,0 +1,29 @@
+.react-flow__node {
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.react-flow__node:hover {
+  transform: scale(1.05);
+}
+
+.react-flow__edge {
+  cursor: pointer;
+}
+
+.react-flow__edge-path {
+  transition: stroke-width 0.2s ease;
+}
+
+.react-flow__edge:hover .react-flow__edge-path {
+  stroke-width: 3;
+}
+
+.edge-context-tooltip {
+  pointer-events: none;
+}
+
+.edge-context-tooltip p {
+  margin: 4px 0;
+  line-height: 1.4;
+}

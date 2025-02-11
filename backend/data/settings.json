@@ -1,0 +1,7 @@
+{
+  "notesDirectory": "./data/notes",
+  "pythonPath": "python3",
+  "ollamaModel": "mistral",
+  "ollamaEndpoint": "http://localhost:11434/api",
+  "theme": "light"
+}

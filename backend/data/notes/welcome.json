@@ -1,0 +1,60 @@
+{
+  "id": "welcome",
+  "content": "# Welcome to Wazo Notes!\n******\n\n \nadfasd\n******\n```python\nprint(\"hello\")\n```\n******\n```cpp\n#include <iostream>\nusing namespace std;\nint main(){\ncout << \"hello\" << endl;\nreturn 0;\n}\n```\n******\n```cpp\n#include <iostream>\nusing namespace std;\nint main(){\ncout << \"hello\" << endl;\nreturn 0;\n}\n```\n******\n\n******\n",
+  "created_at": "2024-12-08T18:56:37.895Z",
+  "last_modified": "2024-12-08T19:54:27.918Z",
+  "tags": [
+    "welcome",
+    "getting-started"
+  ],
+  "backlinks": [],
+  "references": [],
+  "suggested_links": [],
+  "code_outputs": {
+    "welcome-2-": {
+      "stderr": "Code and language are required",
+      "timestamp": "2024-12-08T19:05:31.858Z",
+      "codeBlock": {
+        "content": "python    \"print(\"hello\")  ",
+        "language": "",
+        "lineNumber": -1
+      }
+    },
+    "welcome-3-python": {
+      "output": "helo\n",
+      "timestamp": "2024-12-08T19:09:52.575Z",
+      "codeBlock": {
+        "content": "print(\"helo\")",
+        "language": "python",
+        "lineNumber": -1
+      }
+    },
+    "welcome-2-python": {
+      "output": "hello\n",
+      "timestamp": "2024-12-08T19:39:10.196Z",
+      "codeBlock": {
+        "content": "print(\"hello\")",
+        "language": "python",
+        "lineNumber": -1
+      }
+    },
+    "welcome-3-cpp": {
+      "output": "hello\n",
+      "timestamp": "2024-12-08T19:54:20.827Z",
+      "codeBlock": {
+        "content": "#include <iostream>\nusing namespace std;\nint main(){\ncout << \"hello\" << endl;\nreturn 0;\n}",
+        "language": "cpp",
+        "lineNumber": -1
+      }
+    },
+    "welcome-4-cpp": {
+      "output": "hello\n",
+      "timestamp": "2024-12-08T19:54:27.917Z",
+      "codeBlock": {
+        "content": "#include <iostream>\nusing namespace std;\nint main(){\ncout << \"hello\" << endl;\nreturn 0;\n}",
+        "language": "cpp",
+        "lineNumber": -1
+      }
+    }
+  }
+}

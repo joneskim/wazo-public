@@ -1,0 +1,586 @@
+/* Theme variables */
+:root {
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8f9fa;
+  --text-primary: #212529;
+  --text-secondary: #6c757d;
+  --border-color: #ddd;
+  --cell-bg: #f1f3f5;
+  --theme-toggle-color: #007bff;
+  --note-list-bg: transparent;
+  --font-family: 'Courier New', Courier, monospace;
+  --markdown-bg: #ffffff;
+  --code-bg: #ffffff;
+  --code-border: #e0e0e0;
+  --error-bg: #fff3f3;
+  --error-border: #dc3545;
+  --error-text: #dc3545;
+  --preview-opacity: 0.7;
+  --primary-color: #007bff;
+  --primary-color-light: #66b3ff;
+  --background-color: #f9fafb;
+  --background-color-light: #f8f9fa;
+  --text-color: #212529;
+  --hover-color: #f8f9fa;
+  --selected-color: #007bff;
+}
+
+[data-theme='dark'] {
+  --bg-primary: #1a1a1a;
+  --bg-secondary: #2d2d2d;
+  --text-primary: #ffffff;
+  --text-secondary: #a0a0a0;
+  --border-color: #404040;
+  --cell-bg: #333333;
+  --theme-toggle-color: #0d6efd;
+}
+
+/* Notebook Container */
+.notebook {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: 'Courier New', Courier, monospace;
+}
+
+/* Cell Styles */
+.cell {
+  position: relative;
+  margin: 1rem 0;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  border: 1px solid var(--border-color);
+  background: var(--background-color-light);
+}
+
+.cell:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.cell.active {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px var(--primary-color-light);
+}
+
+/* Cell Actions */
+.cellActions {
+  position: absolute;
+  left: -40px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.cell:hover .cellActions {
+  opacity: 1;
+}
+
+.cellAction {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid var(--border-color);
+  background: var(--background-color);
+  color: var(--text-color);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+}
+
+.cellAction:hover {
+  background: var(--primary-color);
+  color: white;
+  border-color: var(--primary-color);
+  transform: scale(1.1);
+}
+
+/* Markdown Cell */
+.markdownCell {
+  padding: 1rem;
+}
+
+.markdownCell .editor {
+  width: 100%;
+  min-height: 100px;
+  border: none;
+  background: transparent;
+  color: var(--text-color);
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  resize: none;
+  outline: none;
+}
+
+.markdownCell .preview {
+  padding: 1rem;
+  line-height: 1.6;
+}
+
+.markdownCell .preview h1,
+.markdownCell .preview h2,
+.markdownCell .preview h3 {
+  margin-top: 0;
+  color: var(--text-color);
+}
+
+.markdownCell .preview code {
+  background: var(--background-color);
+  padding: 0.2em 0.4em;
+  border-radius: 3px;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.9em;
+}
+
+.markdownCell .preview pre {
+  background: var(--background-color);
+  padding: 1rem;
+  border-radius: 6px;
+  overflow-x: auto;
+}
+
+/* Code Cell */
+.codeCell {
+  padding: 1rem;
+}
+
+.codeCell .editor {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  background: var(--background-color);
+  border-radius: 6px;
+  padding: 1rem;
+}
+
+.codeCell .output {
+  margin-top: 1rem;
+  padding: 1rem;
+  background: var(--background-color);
+  border-radius: 6px;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.9rem;
+  white-space: pre-wrap;
+  overflow-x: auto;
+}
+
+/* Code Block Styles */
+.code-block {
+  background-color: var(--code-bg);
+  border: 1px solid var(--code-border);
+  border-radius: 4px;
+  margin: 1rem 0;
+  overflow: hidden;
+}
+
+.code-block pre {
+  margin: 0;
+  padding: 1rem;
+  overflow-x: auto;
+}
+
+.code-block code {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.code-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  background-color: var(--bg-secondary);
+  border-bottom: 1px solid var(--code-border);
+}
+
+.code-language {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.code-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.code-output {
+  padding: 1rem;
+  background-color: var(--bg-secondary);
+  border-top: 1px solid var(--code-border);
+  font-size: 0.9rem;
+  color: var(--text-primary);
+}
+
+/* Notebook Header */
+.notebookHeader {
+  padding: 1rem;
+  border-bottom: 1px solid var(--border-color);
+  background: var(--bg-secondary);
+}
+
+.titleInput {
+  width: 100%;
+  font-size: 1.5rem;
+  font-weight: bold;
+  padding: 0.5rem;
+  border: none;
+  background: transparent;
+  color: var(--text-primary);
+  font-family: 'Courier New', Courier, monospace;
+}
+
+.titleInput:focus {
+  outline: none;
+  background: var(--bg-primary);
+  border-radius: 4px;
+}
+
+.notebookContent {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+}
+
+.editor {
+  width: 100%;
+  height: 100%;
+  padding: 2rem;
+  border: none;
+  resize: none;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 1rem;
+  line-height: 1.6;
+  outline: none;
+}
+
+.preview {
+  width: 100%;
+  height: 100%;
+  padding: 2rem;
+  overflow-y: auto;
+  line-height: 1.6;
+}
+
+.preview h1 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.preview h2 {
+  font-size: 1.5rem;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+
+.preview p {
+  margin-bottom: 1rem;
+}
+
+.codeBlock {
+  margin: 1rem 0;
+  background: var(--bg-secondary);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.codeHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  background: rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.language {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.executeButton {
+  padding: 0.25rem 0.75rem;
+  background: var(--theme-toggle-color);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.executeButton:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.codeOutput {
+  border-top: 1px solid var(--border-color);
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.outputHeader {
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  border-bottom: 1px solid var(--border-color);
+}
+
+/* Dark mode adjustments */
+[data-theme='dark'] .codeBlock {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+[data-theme='dark'] .codeHeader {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme='dark'] .codeOutput {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+/* Scrollbar styling */
+.preview::-webkit-scrollbar {
+  width: 8px;
+}
+
+.preview::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.preview::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 4px;
+}
+
+.preview::-webkit-scrollbar-thumb:hover {
+  background: var(--text-secondary);
+}
+
+/* Sidebar Styles */
+.sidebar {
+  width: 250px;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid var(--border-color);
+  background-color: transparent;
+  transition: width 0.3s ease;
+}
+
+.collapsedSidebar {
+  width: 90px;
+}
+
+.sidebarHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.toggleButton {
+  cursor: pointer;
+  background: none;
+  border: none;
+  font-size: 20px;
+  color: var(--text-primary);
+}
+
+.addButton {
+  color: var(--text-primary);
+  padding: 10px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.addButton:hover,
+.iconButton:hover {
+  background-color: var(--bg-secondary);
+  color: var(--theme-toggle-color);
+  transition: all 0.3s ease;
+}
+
+.addButton:focus {
+  outline: none;
+}
+
+.noteGroup {
+  margin: 10px 0;
+  background-color: var(--note-list-bg);
+  border-width: 0 0 1px 0;
+  border-style: solid;
+  border-color: var(--border-color);
+}
+
+.groupHeader {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+.dateText {
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.noteList {
+  height: 100vh;
+  overflow-y: auto;
+  padding: 20px;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: 'Courier New', Courier, monospace;
+}
+
+.noteItem {
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  border-bottom: 1px solid var(--border-color);
+  padding: 10px;
+  cursor: pointer;
+  position: relative;
+  z-index: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  text-decoration: none;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+.noteItem:hover {
+  background-color: var(--cell-bg);
+}
+
+.noteTitle {
+  font-size: 16px;
+  margin-bottom: 4px;
+  font-family: 'Courier New', Courier, monospace;
+  color: var(--text-primary);
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+}
+
+.iconButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  color: var(--text-primary);
+  transition: all 0.3s ease;
+}
+
+.noteItem.active {
+  background-color: var(--cell-bg);
+  border-left: 3px solid var(--theme-toggle-color);
+}
+
+.noteList::-webkit-scrollbar {
+  width: 8px;
+}
+
+.noteList::-webkit-scrollbar-track {
+  background: var(--bg-primary);
+}
+
+.noteList::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 4px;
+}
+
+.noteList::-webkit-scrollbar-thumb:hover {
+  background: var(--text-secondary);
+}
+
+/* Keyboard Shortcuts Tooltip */
+.shortcutHint {
+  position: absolute;
+  right: 8px;
+  top: 8px;
+  font-size: 0.75rem;
+  color: var(--text-color);
+  opacity: 0.6;
+  background: var(--background-color);
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  border: 1px solid var(--border-color);
+}
+
+/* Prose Styles */
+.prose {
+  @apply text-gray-900 dark:text-gray-100 leading-normal;
+  background-color: transparent !important;
+}
+
+.prose p {
+  @apply mb-4;
+}
+
+.prose h1 {
+  @apply text-3xl font-bold mb-6 mt-8;
+}
+
+.prose h2 {
+  @apply text-2xl font-bold mb-4 mt-6;
+}
+
+.prose h3 {
+  @apply text-xl font-bold mb-3 mt-5;
+}
+
+.prose h4 {
+  @apply text-lg font-bold mb-2 mt-4;
+}
+
+.prose ul {
+  @apply list-disc list-outside ml-6 mb-4;
+}
+
+.prose ol {
+  @apply list-decimal list-outside ml-6 mb-4;
+}
+
+.prose li {
+  @apply mb-1;
+}
+
+.prose a {
+  @apply text-blue-600 dark:text-blue-400 hover:underline;
+}
+
+.prose blockquote {
+  @apply border-l-4 border-gray-200 dark:border-gray-700 pl-4 italic my-4;
+}
+
+.prose code {
+  @apply font-mono text-sm bg-gray-100 dark:bg-gray-800 px-1 py-0.5 rounded;
+}
+
+.prose pre {
+  @apply bg-transparent;
+  margin: 0 !important;
+}
+
+.prose pre code {
+  @apply block p-4 bg-gray-900 dark:bg-gray-900 text-gray-100 overflow-x-auto rounded-lg;
+}
