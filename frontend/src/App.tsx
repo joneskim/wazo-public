@@ -16,7 +16,6 @@ import Register from './pages/auth/Register';
 import axiosInstance from './services/axiosConfig'; // Import axios
 import { isAxiosError } from 'axios';
 import { SplashScreen } from './components/SplashScreen/SplashScreen';
-import LandingPage from './pages/LandingPage';
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -294,7 +293,7 @@ function AppContent() {
     <div className="min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100">
       {showSplashScreen && <SplashScreen onClose={handleCloseSplashScreen} />}
       <Routes>
-        <Route path="/" element={!isAuthenticated ? <LandingPage /> : <Navigate to="/app" />} />
+        <Route path="/" element={!isAuthenticated ? <Navigate to="/login" /> : <Navigate to="/app" />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route
