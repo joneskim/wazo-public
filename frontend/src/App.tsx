@@ -15,7 +15,7 @@ import Login from './pages/auth/Login';
 import Register from './pages/auth/Register';
 import axiosInstance from './services/axiosConfig'; // Import axios
 import { isAxiosError } from 'axios';
-import { SplashScreen } from './components/SplashScreen/SplashScreen';
+
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -48,15 +48,9 @@ function AppContent() {
   });
   const [showSettings, setShowSettings] = useState(false);
   const [showTasks, setShowTasks] = useState(false);
-  const [showSplashScreen, setShowSplashScreen] = useState(false);
 
   const { isAuthenticated } = useAuth();
 
-  useEffect(() => {
-    if (isAuthenticated) {
-      setShowSplashScreen(!localStorage.getItem('hasSeenSplashScreen'));
-    }
-  }, [isAuthenticated]);
 
   const handleCreateNote = useCallback(async () => {
     try {
@@ -228,10 +222,6 @@ function AppContent() {
     }
   };
 
-  const handleCloseSplashScreen = useCallback(() => {
-    setShowSplashScreen(false);
-    localStorage.setItem('hasSeenSplashScreen', 'true');
-  }, []);
 
   const handleDeleteNote = useCallback(async (noteId: string) => {
     try {
@@ -291,7 +281,6 @@ function AppContent() {
 
   return (
     <div className="min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100">
-      {showSplashScreen && <SplashScreen onClose={handleCloseSplashScreen} />}
       <Routes>
         <Route path="/" element={!isAuthenticated ? <Navigate to="/login" /> : <Navigate to="/app" />} />
         <Route path="/login" element={<Login />} />

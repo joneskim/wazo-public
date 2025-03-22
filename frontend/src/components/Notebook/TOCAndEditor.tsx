@@ -2,7 +2,7 @@ import React from 'react';
 import { Editor, Transforms } from 'slate';
 import { ReactEditor } from 'slate-react';
 import { TableOfContents } from './TableOfContents';
-import { EditorArea } from './EditorArea';
+import  EditorArea  from './EditorArea';
 import { Note } from '../../types/Note';
 import { RenderElementProps, RenderLeafProps } from 'slate-react';
 import { ChevronLeft, ChevronRight } from 'react-feather';
